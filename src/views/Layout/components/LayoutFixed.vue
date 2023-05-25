@@ -1,7 +1,11 @@
 <script setup>
+import { useCategoryStore } from '@/stores/category'
 import { useScroll } from '@vueuse/core'
 //useScroll插件获取滚动的距离
 const { y } = useScroll(window)
+
+//从pinia中获取分类数据
+const getCategory = useCategoryStore()
 </script>
 
 <template>
@@ -9,36 +13,9 @@ const { y } = useScroll(window)
     <div class="container">
       <RouterLink class="logo" to="/" />
       <!-- 导航区域 -->
-      <ul class="app-header-nav">
+      <ul class="app-header-nav" v-for="item in getCategory.categoryList" :key="item.id">
         <li class="home">
-          <RouterLink to="/">首页</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">居家</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">美食</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">服饰</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">母婴</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">个护</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">严选</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">数码</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">运动</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">杂项</RouterLink>
+          <RouterLink to="/">{{ item.name }}</RouterLink>
         </li>
       </ul>
 
