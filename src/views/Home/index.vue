@@ -16,9 +16,7 @@ import HomePanel from '@/views/Home/components/HomePanel.vue'
   <homeProduct />
   <!--  测试面板组件-->
   <HomePanel title="title" su-title="suTitle">
-    <template v-slot:main>
-      <div>测试面板组件 具名插槽</div>
-    </template>
+    <div>测试面板组件 具名插槽</div>
   </HomePanel>
 </template>
 <style scoped></style>

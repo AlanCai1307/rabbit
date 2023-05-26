@@ -19,7 +19,7 @@ defineProps({
         </h3>
       </div>
       <!-- 主体内容区域 -->
-      <slot name="main" />
+      <slot />
     </div>
   </div>
 </template>
