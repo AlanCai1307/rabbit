@@ -27,3 +27,12 @@ export function getHotAPI() {
     url: '/home/hot'
   })
 }
+
+/**
+ * 商品
+ */
+export function getGoodsAPI() {
+  return httpInstance({
+    url: '/home/goods'
+  })
+}
