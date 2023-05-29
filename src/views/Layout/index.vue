@@ -15,6 +15,8 @@ onMounted(() => categoryStore.getCategory())
   <LayoutNav />
   <LayoutHeader />
   <!--  二级路由出口组件-->
+  <!--  添加key防止破坏组件复用，强制销毁重建
+  <RouterView :key="$route.fullPath"/>-->
   <RouterView />
   <LayoutFooter />
 </template>

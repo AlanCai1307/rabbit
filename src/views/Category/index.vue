@@ -1,7 +1,7 @@
 <script setup>
 import { getTopCategoryAPI } from '@/apis/category'
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { getBannerAPI } from '@/apis/home'
 import GoodsItem from '@/views/Home/components/GoodsItem.vue'
 
@@ -29,6 +29,9 @@ const getBanner = async () => {
 onMounted(() => {
   getBanner('2')
   getCategory(route.params.id)
+})
+onBeforeRouteUpdate((to) => {
+  getCategory(to.params.id)
 })
 </script>
 <template>
