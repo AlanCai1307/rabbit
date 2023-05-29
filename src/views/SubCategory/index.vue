@@ -4,13 +4,13 @@ import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const filterData = ref({})
-const getfilterData = async () => {
+const categoryData = ref({})
+const getCategoryData = async () => {
   const res = await getCategoryFilterAPI(route.params.id)
-  filterData.value = res.result
-  console.log('filterData', filterData.value)
+  categoryData.value = res.result
+  console.log('categoryData', categoryData.value)
 }
-onMounted(() => getfilterData())
+onMounted(() => getCategoryData())
 </script>
 <template>
   <div class="container">
@@ -18,10 +18,10 @@ onMounted(() => getfilterData())
     <div class="bread-container">
       <el-breadcrumb separator=">">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: `/category/${filterData.parentId}` }"
-          >{{ filterData.parentName }}
+        <el-breadcrumb-item :to="{ path: `/category/${categoryData.parentId}` }"
+          >{{ categoryData.parentName }}
         </el-breadcrumb-item>
-        <el-breadcrumb-item>{{ filterData.name }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ categoryData.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="sub-container">
