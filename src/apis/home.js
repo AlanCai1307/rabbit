@@ -4,9 +4,14 @@ import httpInstance from '@/utils/http'
  * 轮播图
  * @returns {*}
  */
-export function getBannerAPI() {
+export function getBannerAPI(params = {}) {
+  // 解构赋值，默认为1（首页） 一级分类页面为2
+  const { distributionSite = '1' } = params
   return httpInstance({
-    url: '/home/banner'
+    url: '/home/banner',
+    params: {
+      distributionSite
+    }
   })
 }
 
