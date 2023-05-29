@@ -1,16 +1,43 @@
 <script setup>
-import { getCategoryFilterAPI } from '@/apis/category'
+import { getCategoryFilterAPI, getSubCategoryAPI } from '@/apis/category'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-
+import GoodsItem from '@/views/Home/components/GoodsItem.vue'
+// 获取面包屑导航数据
 const route = useRoute()
-const filterData = ref({})
-const getfilterData = async () => {
+const categoryData = ref({})
+const getCategoryData = async () => {
   const res = await getCategoryFilterAPI(route.params.id)
-  filterData.value = res.result
-  console.log('filterData', filterData.value)
+  categoryData.value = res.result
+  console.log('categoryData', categoryData.value)
 }
-onMounted(() => getfilterData())
+onMounted(() => getCategoryData())
+
+// 获取基础列表数据渲染
+const goodList = ref([])
+const reqData = ref({
+  categoryId: route.params.id,
+  page: 1,
+  pageSize: 20,
+  sortField: 'publishTime'
+})
+const getGoodList = async () => {
+  const res = await getSubCategoryAPI(reqData.value)
+  goodList.value = res.result.items
+  console.log('goodList', goodList.value)
+}
+onMounted(() => getGoodList())
+
+/**
+ * tab切换回调
+ * 通过tab切变改变reqData中的sortField字段请求不同数据
+ * 接口有问题，改变sortField数据不会变
+ */
+const tabChange = () => {
+  console.log('tab切换了', reqData.value.sortField)
+  reqData.value.page = 1 //初始化页数
+  getGoodList()
+}
 </script>
 <template>
   <div class="container">
@@ -18,20 +45,21 @@ onMounted(() => getfilterData())
     <div class="bread-container">
       <el-breadcrumb separator=">">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: `/category/${filterData.parentId}` }"
-          >{{ filterData.parentName }}
+        <el-breadcrumb-item :to="{ path: `/category/${categoryData.parentId}` }"
+          >{{ categoryData.parentName }}
         </el-breadcrumb-item>
-        <el-breadcrumb-item>{{ filterData.name }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ categoryData.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="sub-container">
-      <el-tabs>
+      <el-tabs v-model="reqData.sortField" @tab-change="tabChange">
         <el-tab-pane label="最新商品" name="publishTime"></el-tab-pane>
         <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
       <div class="body">
         <!-- 商品列表-->
+        <GoodsItem v-for="good in goodList" :key="good.id" :goods="good"></GoodsItem>
       </div>
     </div>
   </div>
