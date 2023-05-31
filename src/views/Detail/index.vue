@@ -2,8 +2,6 @@
 import { useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import { getDetailAPI } from '@/apis/detail'
-import DetailHot from '@/views/Detail/components/DetailHot.vue'
-import ImageView from '@/components/ImageView/index.vue'
 import XtxSku from '@/components/XtxSku/index.vue'
 
 const route = useRoute()
