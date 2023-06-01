@@ -1,9 +1,13 @@
 <script setup>
 import { ref } from 'vue'
+import { loginAPI } from '@/apis/login'
+import router from '@/router'
+import { ElMessage } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
 //表单数据对象
-const userInfo = ref({
-  account: '',
-  password: '',
+const form = ref({
+  account: '13012345765',
+  password: '123456',
   agree: true
 })
 
@@ -26,9 +30,14 @@ const rules = {
 //获取表单实例,表单统一校验
 const formRef = ref(null)
 const doLogin = () => {
-  formRef.value.validate((valid) => {
+  const { account, password } = form.value
+  formRef.value.validate(async (valid) => {
     if (valid) {
-      //todo
+      await loginAPI({ account, password }).then((res) => {
+        console.log(res)
+        router.replace({ path: '/' })
+        ElMessage.success('登录成功')
+      })
     }
   })
 }
@@ -57,20 +66,20 @@ const doLogin = () => {
           <div class="form">
             <el-form
               ref="formRef"
-              :model="userInfo"
+              :model="form"
               :rules="rules"
               label-position="right"
               label-width="60px"
               status-icon
             >
               <el-form-item prop="account" label="账户">
-                <el-input v-model="userInfo.account" />
+                <el-input v-model="form.account" />
               </el-form-item>
               <el-form-item prop="password" label="密码">
-                <el-input v-model="userInfo.password" />
+                <el-input v-model="form.password" />
               </el-form-item>
               <el-form-item prop="agree" label-width="22px">
-                <el-checkbox size="large" v-model="userInfo.agree">
+                <el-checkbox size="large" v-model="form.agree">
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
