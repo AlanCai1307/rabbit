@@ -1,9 +1,11 @@
 <script setup>
 import { ref } from 'vue'
-import { loginAPI } from '@/apis/login'
 import router from '@/router'
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
 //表单数据对象
 const form = ref({
   account: '13012345765',
@@ -33,7 +35,7 @@ const doLogin = () => {
   const { account, password } = form.value
   formRef.value.validate(async (valid) => {
     if (valid) {
-      await loginAPI({ account, password }).then((res) => {
+      await userStore.getUserInfo({ account, password }).then((res) => {
         console.log(res)
         router.replace({ path: '/' })
         ElMessage.success('登录成功')
@@ -76,7 +78,7 @@ const doLogin = () => {
                 <el-input v-model="form.account" />
               </el-form-item>
               <el-form-item prop="password" label="密码">
-                <el-input v-model="form.password" />
+                <el-input v-model="form.password" type="password" show-password />
               </el-form-item>
               <el-form-item prop="agree" label-width="22px">
                 <el-checkbox size="large" v-model="form.agree">
