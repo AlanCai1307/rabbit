@@ -3,6 +3,9 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import { useUserStore } from '@/stores/user'
+import router from '@/router'
+//import { useRouter } from 'vue-router'//这是setup写法，此处不合适
+
 // 创建axios实例
 const httpInstance = axios.create({
   baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
@@ -33,6 +36,13 @@ httpInstance.interceptors.response.use(
       type: 'error',
       message: e.response.data.message
     })
+    //401 token失效处理
+
+    if (e.response.status === 401) {
+      const userStore = useUserStore()
+      userStore.clearUserInfo()
+      router.push('/login')
+    }
     return Promise.reject(e)
   }
 )
